@@ -22,8 +22,8 @@ export class MyPipelineStack extends cdk.Stack {
     // Definir a ação de origem (por exemplo, GitHub)
     const sourceAction = new codepipeline_actions.GitHubSourceAction({
       actionName: 'GitHub_Source',
-      owner: 'your-github-username',
-      repo: 'your-repo-name',
+      owner: 'matheusgonzalez91',
+      repo: 'prontuario-cdk',
       oauthToken: cdk.SecretValue.secretsManager('GITHUB_TOKEN'),
       output: sourceOutput,
       branch: 'main',
