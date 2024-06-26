@@ -19,12 +19,26 @@ export class MyPipelineStack extends cdk.Stack {
     const sourceOutput = new codepipeline.Artifact();
     const cdkBuildOutput = new codepipeline.Artifact();
 
+    // Role do IAM para o CodePipeline acessar o Secrets Manager
+    const pipelineRole = new iam.Role(this, 'PipelineRole', {
+      assumedBy: new iam.ServicePrincipal('codepipeline.amazonaws.com'),
+    });
+
+    pipelineRole.addToPolicy(new iam.PolicyStatement({
+      actions: [
+        'secretsmanager:GetSecretValue',
+      ],
+      resources: [
+        `arn:aws:secretsmanager:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:secret:AWS_GITHUB_TOKEN-*`,
+      ],
+    }));
+
     // Definir a ação de origem (por exemplo, GitHub)
     const sourceAction = new codepipeline_actions.GitHubSourceAction({
       actionName: 'GitHub_Source',
       owner: 'matheusgonzalez91',
       repo: 'prontuario-cdk',
-      oauthToken: cdk.SecretValue.secretsManager('GITHUB_TOKEN'),
+      oauthToken: cdk.SecretValue.secretsManager('AWS_GITHUB_TOKEN'),
       output: sourceOutput,
       branch: 'main',
     });
@@ -78,6 +92,7 @@ export class MyPipelineStack extends cdk.Stack {
     new codepipeline.Pipeline(this, 'Pipeline', {
       pipelineName: 'MyCdkPipeline',
       artifactBucket: artifactBucket,
+      role: pipelineRole,
       stages: [
         {
           stageName: 'Source',
