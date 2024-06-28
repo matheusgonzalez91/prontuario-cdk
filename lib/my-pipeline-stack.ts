@@ -88,20 +88,14 @@ export class MyPipelineStack extends cdk.Stack {
               'pip install awscli', // Instalar AWS CLI para fazer o upload dos scripts
             ],
           },
-          pre_build: {
-            commands: [
-              'mkdir -p myprontuariobucket',
-              'echo "Sample content" > myprontuariobucket/sample.txt',
-            ],
-          },
           build: {
             commands: [
-              'aws s3 cp myprontuariobucket/ s3://myprontuariobucket/results/ --recursive', // Upload dos scripts para o bucket S3
+              'aws s3 cp scripts/ s3://' + glueScriptsBucket.bucketName + '/ --recursive', // Upload dos scripts para o bucket S3
             ],
           },
         },
         artifacts: {
-          'base-directory': 'myprontuariobucket',
+          'base-directory': 'scripts',
           files: [
             '**/*',
           ],
