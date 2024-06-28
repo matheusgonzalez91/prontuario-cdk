@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - pip install awscli
+
+  build:
+    commands:
+      - echo "Creating directory and adding files"
+      - mkdir -p myprontuariobucket
+      - echo "Sample content" > myprontuariobucket/sample.txt
+      - aws s3 cp myprontuariobucket/ s3://myprontuariobucket/results/ --recursive
+
+artifacts:
+  files:
+    - '**/*'
