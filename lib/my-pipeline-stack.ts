@@ -130,30 +130,6 @@ export class MyPipelineStack extends cdk.Stack {
       adminPermissions: true,
     });
 
-    // Definir o projeto de build para iniciar o Glue Job
-    const glueJobStartProject = new codebuild.PipelineProject(this, 'GlueJobStartProject', {
-      buildSpec: codebuild.BuildSpec.fromObject({
-        version: '0.2',
-        phases: {
-          build: {
-            commands: [
-              'aws glue start-job-run --job-name job_prontuario'
-            ],
-          },
-        },
-      }),
-      environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
-      },
-    });
-
-    // Definir a ação para iniciar o Glue Job
-    const glueJobStartAction = new codepipeline_actions.CodeBuildAction({
-      actionName: 'Start_Glue_Job',
-      project: glueJobStartProject,
-      input: glueScriptOutput,
-    });
-
     // Definir o pipeline
     new codepipeline.Pipeline(this, 'Pipeline', {
       pipelineName: 'MyCdkPipeline',
@@ -171,10 +147,6 @@ export class MyPipelineStack extends cdk.Stack {
         {
           stageName: 'Deploy',
           actions: [deployAction],
-        },
-        {
-          stageName: 'GlueJob',
-          actions: [glueJobStartAction],
         },
       ],
     });
