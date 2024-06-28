@@ -90,12 +90,12 @@ export class MyPipelineStack extends cdk.Stack {
           },
           build: {
             commands: [
-              'aws s3 cp my_glue_jobs/ s3://myprontuariobucket/results/ --recursive', // Upload dos scripts para o bucket S3
+              'aws s3 cp myprontuariobucket/ s3://myprontuariobucket/results/ --recursive', // Upload dos scripts para o bucket S3
             ],
           },
         },
         artifacts: {
-          'base-directory': 'my_glue_jobs',
+          'base-directory': 'myprontuariobucket',
           files: [
             '**/*',
           ],
