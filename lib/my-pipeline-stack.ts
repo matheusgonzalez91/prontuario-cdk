@@ -90,7 +90,7 @@ export class MyPipelineStack extends cdk.Stack {
           },
           build: {
             commands: [
-              'aws s3 cp scripts/ s3://' + glueScriptsBucket.bucketName + '/ --recursive', // Upload dos scripts para o bucket S3
+              'aws s3 cp scripts/ s3://myprontuariobucket/results/ / --recursive', // Upload dos scripts para o bucket S3
             ],
           },
         },
